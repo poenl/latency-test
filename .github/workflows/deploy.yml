@@ -1,0 +1,50 @@
+# 推到 main 就自动构建并发布到 GitHub Pages。
+# 站点用自定义域名，位于根路径，所以 vite.config.ts 不需要设置 base。
+name: 部署到 GitHub Pages
+
+on:
+  push:
+    branches: [main]
+  # 允许在 Actions 页面手动触发
+  workflow_dispatch:
+
+# 发布 Pages 需要这三个权限
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# 同时只跑一次部署，后进来的取消前面的
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v7
+
+      # 先装 pnpm，再装 Node 并缓存 pnpm 的依赖存储
+      - uses: pnpm/action-setup@v6
+        with:
+          version: 11
+      - uses: actions/setup-node@v7
+        with:
+          node-version: lts/*
+          cache: pnpm
+
+      # --frozen-lockfile：锁文件与 package.json 对不上就直接失败，不偷偷改依赖
+      - run: pnpm install --frozen-lockfile
+      # build 里带 tsc --noEmit：类型不过就不发布
+      - run: pnpm build
+
+      - uses: actions/configure-pages@v6
+      - uses: actions/upload-pages-artifact@v5
+        with:
+          path: ./dist
+      - id: deployment
+        uses: actions/deploy-pages@v5
