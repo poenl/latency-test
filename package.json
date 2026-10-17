@@ -1,0 +1,39 @@
+{
+  "name": "latency-test",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc --noEmit && vite build",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint --cache --cache-location node_modules/.cache/eslint/ .",
+    "check": "concurrently -n ts,eslint -c blue,magenta \"tsc --noEmit\" \"eslint --cache --cache-location node_modules/.cache/eslint/ .\"",
+    "format": "prettier --write .",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "fourier-transform": "^2.5.1",
+    "react": "^19.3.0",
+    "react-dom": "^19.3.0"
+  },
+  "devDependencies": {
+    "@tailwindcss/vite": "^4.3.3",
+    "@types/node": "^26.6.5",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "@vitejs/plugin-react": "^4.7.0",
+    "concurrently": "^10.0.6",
+    "eslint": "^10.12.0",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-react-hooks": "^7.1.1",
+    "eslint-plugin-react-refresh": "^0.5.7",
+    "prettier": "^3.9.10",
+    "prettier-plugin-tailwindcss": "^0.8.1",
+    "prettier-plugin-tailwindcss-canonical-classes": "^0.1.6",
+    "tailwindcss": "^4.3.3",
+    "typescript": "^5.6.3",
+    "typescript-eslint": "^8.71.2",
+    "vite": "^5.4.11"
+  }
+}

@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>音频延迟测试 — 浏览器中的音频延迟测量</title>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta
+      name="description"
+      content="在浏览器中测量音频设备从播放到被麦克风接收的延迟。先测一台基准设备，再测待测设备，两者相减得到该设备自身的延迟，据此判断它能否胜任看视频、打游戏。"
+    />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="音频延迟测试" />
+    <meta
+      property="og:description"
+      content="在浏览器中测量音频设备的播放延迟，与基准设备对比后得出该设备自身的延迟。"
+    />
+  </head>
+  <body>
+    <div id="app"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

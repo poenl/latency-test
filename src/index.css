@@ -1,0 +1,180 @@
+@import 'tailwindcss';
+
+/*
+ * 深色是默认主题；配色与尺寸取自 reactbits.dev 的实测值，字体用系统栈（不引外部字体文件）。
+ * 两套主题的 token 名单一一对应（个别 token 两套同值，如 --color-dim）。
+ */
+@theme {
+  --color-page: #120f17;
+  --color-control: rgba(255, 255, 255, 0.07);
+  /* 框线（导航条底边、面板、下拉面板、状态行）与三个 hover 底色：控件、设备行、主按钮 */
+  --color-line: rgba(255, 255, 255, 0.07);
+  --color-control-hover: rgba(255, 255, 255, 0.12);
+  --color-raise-2: rgba(255, 255, 255, 0.06);
+  --color-accent-hover: #cfccd8;
+  --color-ink: #ffffff;
+  --color-muted: #a1a1aa;
+  --color-dim: #71717a;
+  --color-soft: rgba(255, 255, 255, 0.72);
+  --color-foot: #96909f;
+  --color-brand: #a855f7;
+  --color-ok: #4ade80;
+  --color-warn: #fbbf24;
+  --color-err: #f87171;
+  /* 四种「面」的底色：导航胶囊、步骤徽章、工具条与下拉、判定胶囊 */
+  --color-chip-2: #332e3e;
+  --color-panel: #2a2633;
+  --color-pill: #2a272e;
+  /* 叠在面上的灰度：选中项、微弱层 */
+  --color-raise: rgba(255, 255, 255, 0.1);
+  /* 刻度：闪烁格、未点亮格（未点亮复用 raise）；文字：量程数字与占位数字 */
+  --color-tick-hot: rgba(255, 255, 255, 0.45);
+  --color-faint: rgba(255, 255, 255, 0.3);
+  --color-faint-strong: rgba(255, 255, 255, 0.6);
+  /* 主按钮底色（实色） */
+  --color-accent: #f4f2f7;
+  /* 声场（canvas）用的颜色：也走 token，参与统一计数。dot / ring-hot 存 RGB 三元组，
+     因为代码要用它们拼 rgba(...,alpha) 的透明度阶梯 */
+  --canvas-line: rgba(255, 255, 255, 0.05);
+  --canvas-line-strong: rgba(255, 255, 255, 0.09);
+  --canvas-dot: 255, 255, 255;
+  --canvas-dot-hot: 196, 150, 255;
+  --canvas-ring-hot: 168, 85, 247;
+  --canvas-scratch: rgba(255, 255, 255, 0.06);
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+
+:root {
+  /* 让滚动条、原生控件跟着主题变 */
+  color-scheme: dark;
+  /* 立体感：小控件一圈内高光，大面同值，浮层是大投影，主按钮自带高光与底边。
+     这几条刻意不放进 @theme：Tailwind 会把那里的阴影值在构建时写死进 --tw-shadow，
+     运行时覆盖就不会生效；放在这里配 var() 引用才能跟着主题切色。 */
+  --sh-raise: inset 0 1px 0 rgba(255, 255, 255, 0.07);
+  --sh-raise-2: inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  --sh-pop: 0 8px 32px rgba(0, 0, 0, 0.4);
+  /* 选中项（设备行）的描边：深色下选中就是灰底，不需要描边 */
+  /* 焦点环：深色是文字色混 55%；浅色用实色 */
+  --focus-ring: color-mix(in srgb, var(--color-ink) 55%, transparent);
+  --sh-accent:
+    inset 0 1px 0 #fff, inset 0 -1px 0 rgba(18, 15, 23, 0.1), 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+/* 浅色主题：token 名单与深色完全一致（数量相同、每套内部无重复值） */
+:root[data-theme='light'] {
+  color-scheme: light;
+
+  --color-page: #efedf3;
+  --color-control: #ffffff;
+  --color-line: #d9d7de;
+  --color-control-hover: #f4f3f6;
+  --color-raise-2: #eceaf0;
+  --color-accent-hover: #34323b;
+  --color-ink: #18181b;
+  --color-muted: #52525b;
+  --color-dim: #71717a;
+  --color-soft: #56565f;
+  --color-foot: #74747d;
+
+  /* 语义色用 700 档：600 档在白底上对比不够（提示文字实测 3.19:1） */
+  --color-brand: #8f36e8;
+  --color-ok: #15803d;
+  --color-warn: #b45309;
+  --color-err: #b91c1c;
+
+  --color-chip-2: #ffffff;
+  --color-panel: #f7f7f8;
+  --color-pill: #ffffff;
+  --color-raise: #d9d7de;
+
+  --color-tick-hot: rgba(24, 20, 32, 0.45);
+  --color-faint: #5c5c66;
+  --color-faint-strong: #6e6e78;
+  --color-accent: #18171c;
+
+  /* 声场（canvas）颜色：与深色同名同数量 */
+  --canvas-line: rgba(24, 20, 32, 0.05);
+  --canvas-line-strong: rgba(24, 20, 32, 0.08);
+  --canvas-dot: 168, 85, 247;
+  --canvas-dot-hot: 120, 40, 200;
+  --canvas-ring-hot: 124, 44, 205;
+  --canvas-scratch: rgba(24, 20, 32, 0.04);
+
+  --sh-raise: 0 0 0 1px #e7e7e9;
+  --sh-raise-2: 0 0 0 1px #e7e7e9;
+  --sh-pop: 0 14px 34px rgba(24, 20, 32, 0.1);
+  --sh-accent: inset 0 1px #ffffff24, 0 1px 2px #18181b4d, 0 10px 24px -10px #18181b8c;
+  --focus-ring: #1a1a1e;
+}
+
+/* 不联动父级滚动链、手机不触发下拉刷新与橡皮筋（滚动条保留） */
+html,
+body {
+  overscroll-behavior: none;
+}
+
+body {
+  background: var(--color-page);
+  color: var(--color-ink);
+  font-family:
+    -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* 块进场：淡入上移 */
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+}
+.fade-up {
+  animation: fade-up 0.35s cubic-bezier(0.23, 1, 0.32, 1) both;
+}
+
+/* 测量中数字的缓慢呼吸：1.6 秒一轮 */
+@keyframes breathe {
+  50% {
+    opacity: 0.55;
+  }
+}
+.breathe {
+  animation: breathe 1.6s ease-in-out infinite;
+}
+
+/* 焦点环：2px 实线、偏移 3px；颜色按主题取（深色白 55%、浅色实色墨） */
+:focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 3px;
+}
+
+/* 控件毛玻璃：只在浅色加 */
+:root[data-theme='light'] .blur-control {
+  backdrop-filter: blur(20px) saturate(1.18);
+}
+
+/* 页面底部渐隐：只在浅色显示（深色保持原状：没有这层）；高度按最下面收口 */
+.fade-floor {
+  display: none;
+  position: fixed;
+  inset: auto 0 0 0;
+  z-index: 5;
+  height: clamp(120px, 18vh, 220px);
+  pointer-events: none;
+}
+:root[data-theme='light'] .fade-floor {
+  display: block;
+  background: linear-gradient(
+    to bottom,
+    transparent 0%,
+    rgba(239, 237, 243, 0.28) 30%,
+    #efedf3 100%
+  );
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fade-up,
+  .breathe {
+    animation: none;
+  }
+}
